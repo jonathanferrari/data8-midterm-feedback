@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-categories = ["GSI", "AI", "Lab", "Ed", "Office Hours", "Lecture", "Resources"]
+all_categories = ["GSI", "AI", "Lab", "Ed", "Office Hours", "Lecture", "Resources"]
 
 class Analyze:
     """
@@ -327,11 +327,14 @@ if uploaded_file is not None:
         st.write(data.df)
 
     with st.sidebar:
-        st.subheader('Select Question Type')
-        categories = st.multiselect('Select Question Type', categories)
+        st.header('Select Question Type')
+        for category in all_categories:
+            st.checkbox(category, key=category)
+        categories = [i for i in all_categories if st.session_state[i]]
     for category in categories:
         with st.expander(f"**{category}**", expanded=True):
             eval(f"data.{category.lower().replace(' ', '_')}_display()")
-
+else:
+    st.warning('Please upload a CSV file to continue.')
         
 
